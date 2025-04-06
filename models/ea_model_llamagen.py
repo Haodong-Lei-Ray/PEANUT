@@ -172,7 +172,7 @@ class EaModel(nn.Module):
         configpath=os.path.join(ea_model_path,"config.json")
         if not os.path.exists(configpath):
             # configpath = hf_hub_download(ea_model_path, "config.json")
-            configpath = '/home/server38/doohyuk_workspace/VisionSpec/EAGLE/eagle/train/llamagen_3B_config.json'
+            configpath = '/home/leihaodong/MM25/PEANUT/data/configs/llamagen_t2i_config.json'
 
         try:
             load_model_path=os.path.join(ea_model_path, "pytorch_model.bin")
