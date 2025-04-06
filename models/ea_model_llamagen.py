@@ -100,12 +100,13 @@ class EaModel(nn.Module):
             self,
             base_model,
             base_model_name_or_path,
-            ea_model_path,
+            ea_model_config_path,
             total_token,
             depth,
             top_k,
             threshold,
-            ea_layer_state_dict
+            ea_layer_state_dict,
+            ea_model_path
     ):
 
         super().__init__()
@@ -115,8 +116,8 @@ class EaModel(nn.Module):
         self.vocab_size = base_model.lm_head.weight.shape[0]
         self.base_model_name_or_path = base_model_name_or_path
         # self.tokenizer = AutoTokenizer.from_pretrained(self.base_model_name_or_path,use_fast=False)
-        config = EConfig.from_pretrained(ea_model_path)
-        with open(ea_model_path,"r") as f:
+        config = EConfig.from_pretrained(ea_model_config_path)
+        with open(ea_model_config_path,"r") as f:
             con=json.loads(f.read())
         try:
             bias=con["bias"]
@@ -139,8 +140,9 @@ class EaModel(nn.Module):
         self.ea_layer.load_state_dict(ea_layer_state_dict, strict=True)
         self.ea_layer.to(self.base_model.dtype).to(device)
         self.ea_layer.init_tree()
-        ea_model_dir = os.path.dirname(ea_model_path)
-        self.nearest_latents = np.load("ckpts/llamagen/vq_distances/top_16383_indices.npy")
+        ea_model_dir = os.path.dirname(ea_model_config_path)
+        nearest_latents_path = hf_hub_download(ea_model_path, "top_16383_indices.npy")
+        self.nearest_latents = np.load(nearest_latents_path)
 
     # def get_tokenizer(self):
     #     """Get the tokenizer of the base model.
@@ -171,8 +173,8 @@ class EaModel(nn.Module):
 
         configpath=os.path.join(ea_model_path,"config.json")
         if not os.path.exists(configpath):
-            # configpath = hf_hub_download(ea_model_path, "config.json")
-            configpath = '/home/leihaodong/MM25/PEANUT/data/configs/llamagen_t2i_config.json'
+            configpath = hf_hub_download(ea_model_path, "config.json")
+            # configpath = '/home/leihaodong/MM25/PEANUT/data/configs/llamagen_t2i_config.json'
 
         try:
             load_model_path=os.path.join(ea_model_path, "pytorch_model.bin")
@@ -194,7 +196,8 @@ class EaModel(nn.Module):
             depth,
             top_k,
             threshold,
-            ea_layer_state_dict
+            ea_layer_state_dict,
+            ea_model_path
         )
 
 
