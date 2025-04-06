@@ -100,12 +100,13 @@ class EaModel(nn.Module):
             self,
             base_model,
             base_model_name_or_path,
-            ea_model_path,
+            ea_model_config_path,
             total_token,
             depth,
             top_k,
             threshold,
-            ea_layer_state_dict
+            ea_layer_state_dict,
+            ea_model_path
     ):
 
         super().__init__()
@@ -115,8 +116,8 @@ class EaModel(nn.Module):
         self.vocab_size = base_model.lm_head.weight.shape[0]
         self.base_model_name_or_path = base_model_name_or_path
         # self.tokenizer = AutoTokenizer.from_pretrained(self.base_model_name_or_path,use_fast=False)
-        config = EConfig.from_pretrained(ea_model_path)
-        with open(ea_model_path,"r") as f:
+        config = EConfig.from_pretrained(ea_model_config_path)
+        with open(ea_model_config_path,"r") as f:
             con=json.loads(f.read())
         try:
             bias=con["bias"]
@@ -139,7 +140,8 @@ class EaModel(nn.Module):
         self.ea_layer.load_state_dict(ea_layer_state_dict, strict=True)
         self.ea_layer.to(self.base_model.dtype).to(device)
         self.ea_layer.init_tree()
-        self.nearest_latents = np.load("ckpts/anole/vq_distances/top_8191_indices.npy").astype(np.int64)
+        nearest_latents_path = hf_hub_download(ea_model_path, "top_8191_indices.npy")
+        self.nearest_latents = np.load(nearest_latents_path).astype(np.int64)
         self.tokenizer = self.base_model.tokenizer
         self.non_image_tokens = [i for i in range(0, 4)] + [i for i in range(8196, 65536)]
         self.non_image_tokens = torch.tensor(self.non_image_tokens).to(device)
@@ -191,7 +193,8 @@ class EaModel(nn.Module):
             depth,
             top_k,
             threshold,
-            ea_layer_state_dict
+            ea_layer_state_dict,
+            ea_model_path
         )
 
 
