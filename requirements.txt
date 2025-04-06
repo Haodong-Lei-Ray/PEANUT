@@ -36,3 +36,5 @@ open_clip_torch
 clean_fid
 img2dataset
 bs4
+wandb
+hpsv2
