@@ -5,7 +5,7 @@ import entrypoints.generate_train_data as generate_train_data
 import entrypoints.generate_codebook as generate_codebook
 import entrypoints.generate_images as generate_images
 import entrypoints.extract_code as extract_code
-import LANTERN.entrypoints.eval_fid_clip as eval_fid_clip
+import entrypoints.eval_fid_clip as eval_fid_clip
 import entrypoints.eval_prec_recall as eval_prec_recall
 import entrypoints.eval_hpsv2 as eval_hpsv2
 
