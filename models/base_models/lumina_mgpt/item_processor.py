@@ -67,7 +67,7 @@ class FlexARItemProcessor(MMConvItemProcessor):
     def __init__(
         self,
         tokenizer="Alpha-VLLM/Lumina-mGPT-7B-768",
-        base_path="ckpts/lumina_mgpt",
+        base_path="/data/lei/localmodel/lumina_mgpt/",
         conv_template=Conversation,
         target_size=786,
     ):
