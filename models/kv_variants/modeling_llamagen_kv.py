@@ -1448,7 +1448,7 @@ class LlamaForCausalLM(LlamaPreTrainedModel):
         if not hasattr(self, 'vq_model'):
             self.vq_model = VQ_16(codebook_size=16384, codebook_embed_dim=8)
             self.vq_model = self.vq_model.to(self.model.device)
-            checkpoint = torch.load('ckpts/llamagen/vq_ds16_t2i.pt')
+            checkpoint = torch.load('/data/lei/localmodel/llamagen/vq_ds16_t2i.pt')
             self.vq_model.load_state_dict(checkpoint['model'])
             self.vq_model.eval()
             del checkpoint
