@@ -3,46 +3,46 @@
 [ADT-Tree: Fast Inference of Visual Autoregressive Model](https://arxiv.org/abs/2512.21857)
 
 <p align="center">
-  <a href="./README-zh.md"><img src="https://img.shields.io/badge/Lang-%E4%B8%AD%E6%96%87-red?style=for-the-badge" alt="Chinese Version"></a>
+  <a href="./README.md"><img src="https://img.shields.io/badge/Lang-English-blue?style=for-the-badge" alt="English Version"></a>
   <a href="https://arxiv.org/abs/2512.21857"><img src="https://img.shields.io/badge/Paper-arXiv%3A2512.21857-9cf?style=for-the-badge" alt="Paper"></a>
 </p>
 
-This repository is an official PyTorch implementation of the paper [Fast Inference of Visual Autoregressive Model with Adjacency-Adaptive Dynamical Draft Trees](https://arxiv.org/abs/2512.21857).
+本仓库是论文 [Fast Inference of Visual Autoregressive Model with Adjacency-Adaptive Dynamical Draft Trees](https://arxiv.org/abs/2512.21857) 的官方 PyTorch 实现。
 
-Autoregressive (AR) image models achieve diffusion-level quality but suffer from sequential inference, requiring approximately 2,000 steps for a 576x576 image. Speculative decoding with draft trees accelerates LLMs yet underperforms on visual AR models due to spatially varying token prediction difficulty. We identify a key obstacle in applying speculative decoding to visual AR models: inconsistent acceptance rates across draft trees due to varying prediction difficulties in different image regions. We propose Adjacency-Adaptive Dynamical Draft Trees (ADT-Tree), an adjacency-adaptive dynamic draft tree that dynamically adjusts draft tree depth and width by leveraging adjacent token states and prior acceptance rates. ADT-Tree initializes via horizontal adjacency, then refines depth/width via bisectional adaptation, yielding deeper trees in simple regions and wider trees in complex ones. 
+自回归（AR）图像模型可以达到扩散级别的质量，但由于顺序推理的限制，生成一张 576x576 的图像大约需要 2,000 步。使用草稿树的推测解码可以加速 LLM，但在视觉 AR 模型上表现不佳，因为不同图像区域的 token 预测难度不同。我们发现将推测解码应用于视觉 AR 模型的关键障碍：由于不同图像区域预测难度不同，导致草稿树之间的接受率不一致。我们提出了 Adjacency-Adaptive Dynamical Draft Trees（ADT-Tree），一种邻接自适应动态草稿树，通过利用相邻 token 状态和先验接受率来动态调整草稿树的深度和宽度。ADT-Tree 通过水平邻接初始化，然后通过二分自适应优化深度/宽度，在简单区域生成更深的树，在复杂区域生成更宽的树。
 
-All main code refers to the project [LANTERN](https://github.com/jadohu/LANTERN)
+所有主要代码参考了项目 [LANTERN](https://github.com/jadohu/LANTERN)
 
-Thank the LANTERN team for their contributions to the open-source community
-
----
-
-## 📰 News
-
-- **[2025-11-28] TODO: Change the eagle tree**
-- **[2025-11-20] 🎉🎉🎉 Our ADT-Tree is released! 🎉🎉🎉**
-- **Paper Portal for Top Conferences in the Field of Artificial intelligence: [CV_Paper_Portal](https://hongsong-wang.github.io/CV_Paper_Portal/)**
+感谢 LANTERN 团队对开源社区的贡献
 
 ---
 
-## Method and Performance
+## 📰 新闻
 
-![Method](data/picture/method.png)
-
-Below is a comparison of the effects of different methods
-
-![Performance](data/picture/Performance.png)
+- **[2025-11-28] TODO: 更换 eagle tree**
+- **[2025-11-20] 🎉🎉🎉 ADT-Tree 已发布！🎉🎉🎉**
+- **人工智能领域顶级会议论文门户: [CV_Paper_Portal](https://hongsong-wang.github.io/CV_Paper_Portal/)**
 
 ---
 
-## ⚙️ Installation
+## 方法与性能
 
-1. **Install Required Packages**
-    **Requirements**
+![方法](data/picture/method.png)
+
+以下是不同方法的效果对比
+
+![性能](data/picture/Performance.png)
+
+---
+
+## ⚙️ 安装
+
+1. **安装依赖包**
+    **环境要求**
     - Python >= 3.10
     - PyTorch >= 2.4.0
     
-    Install the dependencies listed in `requirements.txt`.
+    安装 `requirements.txt` 中列出的依赖项。
     ```bash
     git clone https://github.com/Haodong-Lei-Ray/ADT-Tree.git
     cd ADT-Tree
@@ -51,19 +51,19 @@ Below is a comparison of the effects of different methods
     pip install -r requirements.txt
     ```
 
-2. **Additional Setup**
+2. **额外设置**
     1. **Lumina-mGPT**
-        For [Lumina-mGPT](https://github.com/Alpha-VLLM/Lumina-mGPT), we need to install `flash_attention` and `xllmx` packages.
+        对于 [Lumina-mGPT](https://github.com/Alpha-VLLM/Lumina-mGPT)，需要安装 `flash_attention` 和 `xllmx` 包。
         ```bash
         pip install flash-attn --no-build-isolation
         cd models/base_models/lumina_mgpt
         pip install -e .
         ```
 
-3. **Checkpoints**
-    All model weights and other required data should be stored in `ckpts/`.
+3. **模型权重**
+    所有模型权重和其他所需数据应存放在 `ckpts/` 目录下。
     1. **Lumina-mGPT**
-        For Lumina-mGPT, since currently the Chameleon implementation in transformers does not contain the VQ-VAE decoder, please manually download the original VQ-VAE weights [provided by Meta](https://github.com/facebookresearch/chameleon) and put them to the following directory:
+        对于 Lumina-mGPT，由于目前 transformers 中的 Chameleon 实现不包含 VQ-VAE 解码器，请手动下载 [Meta 提供的原始 VQ-VAE 权重](https://github.com/facebookresearch/chameleon) 并放置到以下目录：
         ```
         ckpts
         └── lumina_mgpt
@@ -74,7 +74,7 @@ Below is a comparison of the effects of different methods
                     └── vqgan.ckpt
         ```
 
-        Also download the original model [`Lumina-mGPT-7B-768`](https://huggingface.co/Alpha-VLLM/Lumina-mGPT-7B-768) from Huggingface 🤗 and put them to the following directory:
+        同时从 Huggingface 🤗 下载原始模型 [`Lumina-mGPT-7B-768`](https://huggingface.co/Alpha-VLLM/Lumina-mGPT-7B-768) 并放置到以下目录：
         ```
         ckpts
         └── lumina_mgpt
@@ -85,9 +85,9 @@ Below is a comparison of the effects of different methods
                 └── other files...
         ```
     2. **Anole**
-        For Anole, download [`Anole-7b-v0.1-hf`](https://huggingface.co/leloy/Anole-7b-v0.1-hf), which is a huggingface style converted model from [`Anole`](https://huggingface.co/GAIR/Anole-7b-v0.1). 
+        对于 Anole，下载 [`Anole-7b-v0.1-hf`](https://huggingface.co/leloy/Anole-7b-v0.1-hf)，这是从 [`Anole`](https://huggingface.co/GAIR/Anole-7b-v0.1) 转换而来的 Huggingface 格式模型。
         
-        In addition, you should download the original VQ-VAE weights [provided by Meta](https://github.com/facebookresearch/chameleon) and put them to the following directory:
+        此外，还需要下载 [Meta 提供的原始 VQ-VAE 权重](https://github.com/facebookresearch/chameleon) 并放置到以下目录：
 
         ```
         ckpts
@@ -104,8 +104,8 @@ Below is a comparison of the effects of different methods
                     └── vqgan.ckpt
         ```
 
-        **(Optional) Trained drafter**
-        To use trained drafter, you need to download [`anole_drafter`](https://huggingface.co/jadohu/anole_drafter) and save it under trained_drafters directory.
+        **（可选）训练好的 drafter**
+        要使用训练好的 drafter，需要下载 [`anole_drafter`](https://huggingface.co/jadohu/anole_drafter) 并保存到 trained_drafters 目录下。
         ```
         ckpts
         └── anole
@@ -119,10 +119,10 @@ Below is a comparison of the effects of different methods
 
 ---
 
-## ✨ Usage
+## ✨ 使用方法
 
 ### ANOLE
-ADT-Tree+LANTERN in MSCOCO2017Val
+在 MSCOCO2017Val 上运行 ADT-Tree+LANTERN
 ```
 cd ./ADT-Tree
 prompt=MSCOCO2017Val
@@ -133,7 +133,7 @@ lantern_delta=0.5
 lantern_k=100
 
 #output_path=/home/leihaodong/TIP26/exp/Anole/MSCOCO2017Val/lantern_ADT-Tree
-output_path=<your out path>
+output_path=<你的输出路径>
 
 mkdir -p ${output_path}
 
@@ -157,14 +157,15 @@ nohup python main.py generate_images \
 ADT-Tree+LANTERN
 
 
-## ⚖️ License
+## ⚖️ 许可证
 
-This project is distributed under the Chameleon License by Meta Platforms, Inc. For more information, please see the `LICENSE` file in the repository.
+本项目遵循 Meta Platforms, Inc. 的 Chameleon 许可证分发。更多信息请参阅仓库中的 `LICENSE` 文件。
 
 ---
 
-## 🙏 Acknowledgement
-This repository is built with extensive reference to [FoundationVision/LlamaGen](https://github.com/FoundationVision/LlamaGen), [Alpha-VLLM/Lumina-mGPT](https://github.com/Alpha-VLLM/Lumina-mGPT) and [SafeAILab/EAGLE](https://github.com/SafeAILab/EAGLE), leveraging many of their core components and approaches.
+## 🙏 致谢
+
+本仓库的构建广泛参考了 [FoundationVision/LlamaGen](https://github.com/FoundationVision/LlamaGen)、[Alpha-VLLM/Lumina-mGPT](https://github.com/Alpha-VLLM/Lumina-mGPT) 和 [SafeAILab/EAGLE](https://github.com/SafeAILab/EAGLE)，借鉴了它们的许多核心组件和方法。
 
 ## Star History
 
@@ -177,7 +178,9 @@ This repository is built with extensive reference to [FoundationVision/LlamaGen]
 </a>
 
 
-## 📄 Citation
+## 📄 引用
+
+如果您使用了本代码库，或认为我们的工作有价值，请引用：
 
 ```
 @misc{lei2025fastinferencevisualautoregressive,
@@ -189,4 +192,4 @@ This repository is built with extensive reference to [FoundationVision/LlamaGen]
       primaryClass={cs.CV},
       url={https://arxiv.org/abs/2512.21857}, 
 }
-
+```
